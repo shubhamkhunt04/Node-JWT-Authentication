@@ -9,20 +9,20 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   name: {
-    type: "String",
+    type: String,
     required: true,
     trim: true,
     unique: true,
   },
   password: {
-    type: "String",
+    type: String,
     required: true,
     trim: true,
   },
-  admin: {
-    type: "Boolean",
-    defaultValue: false,
-  },
+  // admin: {
+  //   type: Boolean,
+  //   default: false,
+  // },
 });
 
 // encrypt password before save

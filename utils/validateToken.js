@@ -15,7 +15,11 @@ module.exports = {
         req.decode = result;
         next();
       } catch (error) {
-        throw new Error(error);
+        console.log(error);
+        res.send({
+          error: "You are not authorize",
+        });
+        // throw new Error(error);
       }
     } else {
       result = {

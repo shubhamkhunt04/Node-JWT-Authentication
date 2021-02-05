@@ -11,33 +11,38 @@ module.exports = {
     let result = {};
     const { name, password } = req.body;
     const newUser = new User({ name, password });
-
-    const token = generateToken(newUser.id);
-    console.log(token);
-
     try {
       const saveUser = await newUser.save();
       result.user = saveUser;
       res.send(result);
     } catch (error) {
-      result.error = error;
+      result.error = "User already exist";
       res.send(result);
     }
   },
 
   login: async (req, res) => {
     let result = {};
-    const { name, password } = req.body;
     try {
+      const { name, password } = await req.body;
       const user = await User.findOne({ name });
       if (user) {
         const match = await bcrypt.compare(password, user.password);
-        match ? (result.user = user) : (result.error = "Authentication error");
-        res.send(result);
+        // match ? (result.user = user) : (result.error = "Authentication error");
+
+        if (match) {
+          const token = generateToken(user.id);
+          result.token = token;
+          result.user = user;
+        } else {
+          result.error = "Athentication erro :) Invalid credential";
+        }
+      } else {
+        result.error = "User does not exist";
       }
-      result.error = "User does not exist";
       res.send(result);
     } catch (error) {
+      console.log(error);
       result.error = error;
       res.send(result);
     }
